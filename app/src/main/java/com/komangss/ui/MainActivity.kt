@@ -9,6 +9,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Resource.Success("haha")
+        when(asyap()){
+            is Resource.Error -> TODO()
+            is Resource.Success -> TODO()
+            Resource.InProgress -> TODO()
+        }
+    }
+
+    private fun asyap() : Resource<String> {
+        return Resource.Success("haha")
     }
 }
