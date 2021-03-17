@@ -42,4 +42,16 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+//    coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+//    viewmodelScope
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+//    lifecycleScope
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0'
+//    livedata lambda
+    implementation 'androidx.lifecycle:lifecycle-lifedata-ktx:2.3.0'
+
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }
