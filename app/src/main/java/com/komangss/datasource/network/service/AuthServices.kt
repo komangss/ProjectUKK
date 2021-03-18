@@ -19,7 +19,7 @@ interface AuthServices {
         @Field("username") username : String,
         @Field("password") password : String,
         @Field("nik") nik : String,
-        @Field("name") name : String,
+        @Field("nama") name : String,
         @Field("telp") telp : String,
     ) : String
 
