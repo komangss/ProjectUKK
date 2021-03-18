@@ -16,7 +16,7 @@ class AuthRepository private constructor(
 
     suspend fun sendLoginRequest(username : String, password : String, role : String) : Resource<String> {
         return try {
-            Resource.Success(authServices.login(username, password, role))
+            Resource.Success(data = authServices.login(username, password, role))
         } catch (e : Exception) {
             Resource.Error(e)
         }
