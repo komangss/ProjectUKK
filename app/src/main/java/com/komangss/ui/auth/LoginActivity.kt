@@ -1,5 +1,6 @@
-package com.komangss.ui.login
+package com.komangss.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val repo = AuthRepository.getInstance(RetrofitBuilder.authServices)
+
+        tv_activity_login_sign_up.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+        }
+
         btn_activity_login_sign_in.setOnClickListener {
             val username = tiet_activity_login_username.text.toString().trim()
             val password = tiet_activity_login_password.text.toString().trim()
