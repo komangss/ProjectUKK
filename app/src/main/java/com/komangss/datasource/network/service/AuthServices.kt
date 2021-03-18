@@ -12,4 +12,16 @@ interface AuthServices {
         @Field("password") password : String,
         @Field("role") role : String
     ) : String
+
+    @FormUrlEncoded
+    @POST("ukaka/auth/registerMasyarakat")
+    suspend fun registerMasyarakat(
+        @Field("username") username : String,
+        @Field("password") password : String,
+        @Field("nik") nik : String,
+        @Field("name") name : String,
+        @Field("telp") telp : String,
+    ) : String
+
+
 }
