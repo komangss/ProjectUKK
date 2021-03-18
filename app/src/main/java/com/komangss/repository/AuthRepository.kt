@@ -7,6 +7,7 @@ class AuthRepository private constructor(
     private val authServices: AuthServices
 ) {
     companion object {
+        @Volatile
         private var instance : AuthRepository? = null
 
         fun getInstance(authServices: AuthServices) : AuthRepository =
