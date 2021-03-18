@@ -16,18 +16,22 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val repo = AuthRepository.getInstance(RetrofitBuilder.authServices)
-        btn_activity_main_sign_in.setOnClickListener {
-            val username = text_view_activity_main_username.text.toString()
-            val password = text_view_activity_main_password.text.toString()
-            lifecycleScope.launch {
-                when (val response = repo.sendLoginRequest(username, password, "masyarakat")) {
-                    is Resource.Error -> {
-                        Toast.makeText(this@LoginActivity, response.exception.message, Toast.LENGTH_SHORT).show()
+        btn_activity_login_sign_in.setOnClickListener {
+            val username = tiet_activity_login_username.text.toString().trim()
+            val password = tiet_activity_login_password.text.toString().trim()
+            when {
+                username == "" -> til_activity_login_username.error = "This Fields cannot be empty"
+                password == "" -> til_activity_login_password.error = "This Fields cannot be empty"
+                else -> lifecycleScope.launch {
+                    when (val response = repo.sendLoginRequest(username, password, "masyarakat")) {
+                        is Resource.Error -> {
+                            Toast.makeText(this@LoginActivity, response.exception.message, Toast.LENGTH_SHORT).show()
+                        }
+                        is Resource.Success -> {
+                            Toast.makeText(this@LoginActivity, response.data, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> Toast.makeText(this@LoginActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
                     }
-                    is Resource.Success -> {
-                        Toast.makeText(this@LoginActivity, response.data, Toast.LENGTH_SHORT).show()
-                    }
-                    else -> Toast.makeText(this@LoginActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
                 }
             }
         }
