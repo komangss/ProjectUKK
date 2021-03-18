@@ -8,13 +8,13 @@ import com.komangss.R
 import com.komangss.datasource.network.instance.RetrofitBuilder
 import com.komangss.repository.AuthRepository
 import com.komangss.util.Resource
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
         val repo = AuthRepository.getInstance(RetrofitBuilder.authServices)
         btn_activity_main_sign_in.setOnClickListener {
             val username = text_view_activity_main_username.text.toString()

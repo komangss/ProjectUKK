@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Password"
+        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -35,6 +36,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/text_view_activity_main_password"
             android:layout_width="match_parent"
+            android:inputType="textPassword"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,11 +51,23 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Doesnt Have Account? Sign Up"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Doesnt Have Account?"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_activity_main_sign_in" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="2dp"
+        android:textColor="#0BCBE4"
+        android:text=" Sign Up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv1"
+        app:layout_constraintTop_toBottomOf="@+id/btn_activity_main_sign_in" />
 </androidx.constraintlayout.widget.ConstraintLayout>
