@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.komangss.R
 import com.komangss.datasource.network.instance.RetrofitBuilder
 import com.komangss.repository.AuthRepository
+import com.komangss.ui.image.ImageUploaderActivity
 import com.komangss.util.Resource
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is Resource.Success -> {
                             Toast.makeText(this@LoginActivity, response.data, Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this@LoginActivity, ImageUploaderActivity::class.java))
                         }
                         else -> Toast.makeText(this@LoginActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
                     }

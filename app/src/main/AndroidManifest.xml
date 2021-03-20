@@ -3,6 +3,7 @@
     package="com.komangss">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectUKK"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.auth.RegisterActivity"></activity>
+        <activity android:name=".ui.image.ImageUploaderActivity" />
+        <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.auth.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
