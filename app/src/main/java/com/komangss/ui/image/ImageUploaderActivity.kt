@@ -9,11 +9,22 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.komangss.R
+import com.komangss.datasource.network.instance.RetrofitBuilder
 import kotlinx.android.synthetic.main.activity_image_uploader.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 
 
@@ -29,19 +40,8 @@ class ImageUploaderActivity : AppCompatActivity() {
 //            FilePickerBuilder.instance.pickFile(this@ImageUploaderActivity)
 //            Error Permission Needed - Solution :
             try {
-                if (ActivityCompat.checkSelfPermission(
-                        this@ImageUploaderActivity,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this@ImageUploaderActivity,
-                        arrayOf(
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ),
-                        PICK_FROM_GALLERY
-                    )
+                if (ActivityCompat.checkSelfPermission(this@ImageUploaderActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
                 } else {
                     val galleryIntent =
                         Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -60,7 +60,21 @@ class ImageUploaderActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val selectedImage = data.data // uri
                     val path = getPath(this@ImageUploaderActivity, selectedImage)
-                    Glide.with(this@ImageUploaderActivity).load(File(path)).into(imageView)
+                    val file = File(path)
+                    Glide.with(this@ImageUploaderActivity).load(file).into(imageView)
+                    val requestFile: RequestBody = RequestBody.create(
+                        MediaType.parse(contentResolver.getType(selectedImage!!)),
+                        file
+                    )
+                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                    lifecycleScope.launch {
+                        val res = RetrofitBuilder.authServices.uploadImage(body)
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@ImageUploaderActivity, res, Toast.LENGTH_SHORT)
+                                .show()
+                            Log.d("result", res.toString())
+                        }
+                    }
                 }
             }
         }
@@ -69,12 +83,12 @@ class ImageUploaderActivity : AppCompatActivity() {
 
     private fun getPath(context: Context, uri: Uri?): String {
         var result: String? = null
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor? =
-            uri?.let { context.getContentResolver().query(it, proj, null, null, null) }
+            context.contentResolver.query(uri!!, projection, null, null, null)
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                val columnIndex: Int = cursor.getColumnIndexOrThrow(proj[0])
+                val columnIndex: Int = cursor.getColumnIndexOrThrow(projection[0])
                 result = cursor.getString(columnIndex)
             }
             cursor.close()
@@ -96,6 +110,13 @@ class ImageUploaderActivity : AppCompatActivity() {
                     val galleryIntent =
                         Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     startActivityForResult(galleryIntent, PICK_FROM_GALLERY)
+
+                    EasyPermissions.onRequestPermissionsResult(
+                        requestCode,
+                        permissions,
+                        grantResults,
+                        this
+                    )
                 } else {
                     //do something like displaying a message that he didn`t allow the app to access gallery and you wont be able to let him select from gallery
                 }

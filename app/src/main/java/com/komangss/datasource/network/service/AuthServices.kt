@@ -1,8 +1,7 @@
 package com.komangss.datasource.network.service
 
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import okhttp3.MultipartBody
+import retrofit2.http.*
 
 interface AuthServices {
     @FormUrlEncoded
@@ -23,5 +22,9 @@ interface AuthServices {
         @Field("telp") telp : String,
     ) : String
 
-
+    @Multipart
+    @POST("ukaka/test/image")
+    suspend fun uploadImage(
+        @Part image : MultipartBody.Part
+    ) : String
 }
