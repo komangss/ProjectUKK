@@ -10,18 +10,14 @@ import com.komangss.datasource.network.instance.RetrofitBuilder
 import com.komangss.repository.AuthRepository
 import com.komangss.ui.image.ImageUploaderActivity
 import com.komangss.util.Resource
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login_petugas.*
 import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity() {
+class LoginPetugasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login_petugas)
         val repo = AuthRepository.getInstance(RetrofitBuilder.authServices)
-
-        tv_activity_login_sign_up.setOnClickListener {
-            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
-        }
 
         btn_activity_login_sign_in.setOnClickListener {
             val username = tiet_activity_login_username.text.toString().trim()
@@ -30,22 +26,18 @@ class LoginActivity : AppCompatActivity() {
                 username == "" -> til_activity_login_username.error = "This Fields cannot be empty"
                 password == "" -> til_activity_login_password.error = "This Fields cannot be empty"
                 else -> lifecycleScope.launch {
-                    when (val response = repo.sendLoginRequest(username, password, "masyarakat")) {
+                    when (val response = repo.sendLoginRequest(username, password, "petugas")) {
                         is Resource.Error -> {
-                            Toast.makeText(this@LoginActivity, response.exception.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginPetugasActivity, response.exception.message, Toast.LENGTH_SHORT).show()
                         }
                         is Resource.Success -> {
-                            Toast.makeText(this@LoginActivity, response.data, Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@LoginActivity, ImageUploaderActivity::class.java))
+                            Toast.makeText(this@LoginPetugasActivity, response.data, Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this@LoginPetugasActivity, ImageUploaderActivity::class.java))
                         }
-                        else -> Toast.makeText(this@LoginActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
+                        else -> Toast.makeText(this@LoginPetugasActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-        }
-
-        tv_activity_login_login_as_petugas.setOnClickListener {
-            startActivity(Intent(this@LoginActivity, ImageUploaderActivity::class.java))
         }
     }
 }

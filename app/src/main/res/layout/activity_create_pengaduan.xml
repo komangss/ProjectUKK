@@ -3,7 +3,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:padding="16dp"
     android:layout_height="match_parent"
     tools:context=".ui.pengaduan.CreatePengaduanActivity">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_create_pengaduan_isi_pengaduan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Isi Pengaduan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tiet_create_pengaduan_isi_pengaduan"
+            android:layout_width="match_parent"
+            android:lines="2"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_choose_image_pengaduan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Choose Image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_create_pengaduan_isi_pengaduan"/>
+
+    <ImageView
+        android:id="@+id/img_pengaduan"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="#ececec"
+        app:layout_constraintTop_toBottomOf="@+id/btn_choose_image_pengaduan"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btn_submit_pengaduan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Submit Pengaduan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

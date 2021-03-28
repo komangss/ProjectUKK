@@ -1,4 +1,4 @@
-package com.komangss.ui.image
+  package com.komangss.ui.image
 
 import android.Manifest
 import android.app.Activity
@@ -39,17 +39,7 @@ class ImageUploaderActivity : AppCompatActivity() {
 //            Dont Forget to add storage permission
 //            FilePickerBuilder.instance.pickFile(this@ImageUploaderActivity)
 //            Error Permission Needed - Solution :
-            try {
-                if (ActivityCompat.checkSelfPermission(this@ImageUploaderActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    val galleryIntent =
-                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    startActivityForResult(galleryIntent, PICK_FROM_GALLERY)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            takeImageTask()
         }
     }
 
@@ -72,7 +62,7 @@ class ImageUploaderActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(this@ImageUploaderActivity, res, Toast.LENGTH_SHORT)
                                 .show()
-                            Log.d("result", res.toString())
+                            Log.d("result", res)
                         }
                     }
                 }
@@ -99,27 +89,33 @@ class ImageUploaderActivity : AppCompatActivity() {
         return result
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            PICK_FROM_GALLERY ->                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
-                    val galleryIntent =
-                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    startActivityForResult(galleryIntent, PICK_FROM_GALLERY)
+    override fun onRequestPermissionsResult(requestCode:Int,
+                                            permissions:Array<String>,
+                                            grantResults:IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
 
-                    EasyPermissions.onRequestPermissionsResult(
-                        requestCode,
-                        permissions,
-                        grantResults,
-                        this
-                    )
-                } else {
-                    //do something like displaying a message that he didn`t allow the app to access gallery and you wont be able to let him select from gallery
-                }
+
+    private fun hasStoragePermission() : Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    fun takeImageTask() {
+        if(hasStoragePermission()) {
+            val galleryIntent =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(galleryIntent, PICK_FROM_GALLERY)
+        } else {
+
+            EasyPermissions.requestPermissions(
+                this,
+                "This app needs access to your storage so you can take pictures.",
+                PICK_FROM_GALLERY,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+
+            )
         }
     }
 }
