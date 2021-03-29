@@ -1,20 +1,21 @@
-  package com.komangss.ui.image
+package com.komangss.ui.image
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.core.util.Pair
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.komangss.R
 import com.komangss.datasource.network.instance.RetrofitBuilder
 import kotlinx.android.synthetic.main.activity_image_uploader.*
@@ -26,6 +27,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ImageUploaderActivity : AppCompatActivity() {
@@ -35,11 +38,38 @@ class ImageUploaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_uploader)
 
+        Glide.with(this@ImageUploaderActivity)
+            .load("http://192.168.43.248/ukaka/public/img/1617041379192.jpg").into(imageView)
+
+        val constraintsBuilder =
+            CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointBackward.now())
+                .build()
+
+        val datePicker =
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select date")
+                .setSelection(
+                    Pair(
+                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                        MaterialDatePicker.todayInUtcMilliseconds()
+                    )
+                )
+                .setCalendarConstraints(constraintsBuilder)
+                .build()
+
         btn_choose_file.setOnClickListener {
 //            Dont Forget to add storage permission
 //            FilePickerBuilder.instance.pickFile(this@ImageUploaderActivity)
 //            Error Permission Needed - Solution :
-            takeImageTask()
+//            takeImageTask()
+
+            datePicker.show(supportFragmentManager, "tag")
+        }
+        datePicker.addOnPositiveButtonClickListener {
+            val first = SimpleDateFormat("yyyy/MM/dd").format(Date(it.first!!))
+            val second = SimpleDateFormat("yyyy/MM/dd").format(Date(it.second!!))
+            Toast.makeText(this, "$first - $second", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -69,7 +99,8 @@ class ImageUploaderActivity : AppCompatActivity() {
                             }
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(this@ImageUploaderActivity, e.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ImageUploaderActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -95,21 +126,23 @@ class ImageUploaderActivity : AppCompatActivity() {
         return result
     }
 
-    override fun onRequestPermissionsResult(requestCode:Int,
-                                            permissions:Array<String>,
-                                            grantResults:IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // EasyPermissions handles the request result.
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
 
-    private fun hasStoragePermission() : Boolean {
+    private fun hasStoragePermission(): Boolean {
         return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
     fun takeImageTask() {
-        if(hasStoragePermission()) {
+        if (hasStoragePermission()) {
             val galleryIntent =
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(galleryIntent, PICK_FROM_GALLERY)
