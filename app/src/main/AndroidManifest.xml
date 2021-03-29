@@ -16,10 +16,10 @@
         <activity android:name=".ui.pengaduan.DetailPengaduanActivity"></activity>
         <activity android:name=".ui.pengaduan.CreatePengaduanActivity" />
         <activity android:name=".ui.dashboard.masyarakat.MasyarakatDashboardActivity" />
-        <activity android:name=".ui.image.ImageUploaderActivity" />
+        <activity android:name=".ui.auth.LoginActivity" />
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.auth.LoginPetugasActivity"/>
-        <activity android:name=".ui.auth.LoginActivity">
+        <activity android:name=".ui.image.ImageUploaderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

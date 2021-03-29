@@ -46,7 +46,7 @@ class CreatePengaduanActivity : AppCompatActivity(),
 
             val multiPartBody = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
             lifecycleScope.launch {
-                pengaduanServices.createPengaduan(multiPartBody, tiet_create_pengaduan_isi_pengaduan.text.toString())
+//                pengaduanServices.createPengaduan(multiPartBody, tiet_create_pengaduan_isi_pengaduan.text.toString())
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@CreatePengaduanActivity, "Pengaduan Inserted Successfuly", Toast.LENGTH_SHORT).show()
                     finish()
@@ -122,7 +122,6 @@ class CreatePengaduanActivity : AppCompatActivity(),
             }
             cursor.close()
         }
-
         return result
     }
 }

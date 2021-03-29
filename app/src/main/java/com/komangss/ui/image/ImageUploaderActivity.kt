@@ -57,13 +57,19 @@ class ImageUploaderActivity : AppCompatActivity() {
                         file
                     )
                     val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-                    lifecycleScope.launch {
-                        val res = RetrofitBuilder.authServices.uploadImage(body)
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(this@ImageUploaderActivity, res, Toast.LENGTH_SHORT)
-                                .show()
-                            Log.d("result", res)
+                    try {
+                        lifecycleScope.launch {
+                            val reqBodyIsi =
+                                RequestBody.create(MediaType.parse("text/plain"), "isi Pengaduan")
+                            val res =
+                                RetrofitBuilder.pengaduanServices.createPengaduan(body, reqBodyIsi)
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(this@ImageUploaderActivity, res, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
+                    } catch (e: Exception) {
+                        Toast.makeText(this@ImageUploaderActivity, e.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
